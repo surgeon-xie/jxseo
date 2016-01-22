@@ -1,0 +1,95 @@
+{template "header.html"}
+<div class="bk10"></div>
+<div class="main photo-channel">
+	<div class="col-left photo-slide">
+        <div class="content">
+            <link href="{HOME_THEME_PATH}news/images/slide.css" type="text/css" rel="stylesheet">
+            <div id="myslide" style="width: 435px; height: 323px;">
+                <table width="100%" cellSpacing="0" cellPadding="0">
+                <tr>
+                <td class="pic" id="bimg">
+                    <!--查询推荐位1的内容，field需要用到的字段（不填表示全部），按displayorder（后台指定排序）排序-->
+                    {list action=module flag=1 field=thumb,title,url order=displayorder,updatetime num=5}
+                    <div class="{if $key==0}dis{else}undis{/if}" name="f">
+                    <a href="{$t.url}" title="{$t.title}" {if $t.target}target="_blank"{/if}><img alt="{$t.title}" style="width: 435px; height: 320px;" src="{dr_thumb($t.thumb, 435, 320)}" border="0"></a>
+                    </div>
+                    {/list}
+                    {$error}<!--如果查询为空，error变量会返回错误提示，正式上线建议删除-->
+                    <table id="font_hd" width="100%" cellSpacing="0" cellPadding="0">
+                    <tr>
+                    <td class="title" id="info">
+                    {list action=module flag=1 field=thumb,title,url order=displayorder,updatetime num=5}
+                    <div class="{if $key==0}dis{else}undis{/if}" name="f">
+                    <a href="{$t.url}" title="{$t.title}" {if $t.target}target="_blank"{/if}>{$t.title}</a>
+                    </div>
+                    {/list}
+                    {$error}<!--如果查询为空，error变量会返回错误提示，正式上线建议删-->
+                    </td>
+                    <td id="simg" nowrap="nowrap" style="text-align:right">
+                   {list action=module flag=1 field=thumb,title,url order=displayorder,updatetime num=5}
+                    <div class="{if $key==0}{else}f1{/if}" onclick=play(x[{$key}],{$key}) name="f">{$key+1}</div>
+                    {/list}<!--如果查询为空，error变量会返回错误提示，正式上线建议-->
+                    </td>
+                    </tr>
+                    </table>
+                    <script src="{HOME_THEME_PATH}news/js/slide.js"></script>
+                </td>
+                </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="photo-hots">
+        <div class="icon"></div>
+        <h4>热门图书</h4>
+        <ul class="content photo-hot picbig">
+            {list action=module field=title,url,thumb order=hits num=6}
+            <li>
+                <div class="img-wrap">
+                    <a href="{$t.url}" title="{$t.title}"><img src="{dr_thumb($t.thumb, 85, 65)}" alt="{$t.title}" style="display: inline; height: 65px; width: 85px;"></a>
+                </div>
+                <a href="{$t.url}" title="{$t.title}">{dr_strcut($t.title,15)}</a>
+            </li>
+            {/list}
+            {$error}<!--如果查询为空，error变量会返回错误提示，正式上线建议删-->
+        </ul>
+    </div>
+    <div class="col-auto" style="height:336px">
+    	<div class="box">
+            <h5 class="title-2">最新图书</h5>
+            <ul class="content digg">
+            {list action=module field=title,url order=updatetime num=8}
+            <li><a href="{$t.url}" title="{$t.title}">{dr_strcut($t.title, 30)}</a></li>
+            {/list} {$error}
+			</ul>
+    	</div>
+    	<div class="bk6"></div>
+   		<img src="{HOME_THEME_PATH}images/ad-photo.png" width="249" height="87" style="border:0px;">
+    </div>
+    <!--循环输出顶级栏目下面的子栏目及其内容，运用到了双list循环标签因此需要定义返回值return=c（都懂得）-->
+	{list action=category pid=0 return=c}
+    <div class="bk10"></div>
+	<div class="photo-cat">
+        <div class="content">
+        	<h5>
+            <a href="{$c.url}"><strong>{$c.name}</strong></a>
+			<span class="blue"><a href="{$c.url}" class="more">更多&gt;&gt;</a></span>
+			</h5>
+            <ul class="photo-list picbig">
+            	<!--循环输出当前栏目下面的数据，我们按时间排序-->
+                {list action=module catid=$c.id field=thumb,title,url,description order=updatetime num=10}
+				<li>
+                    <div class="img-wrap">
+                        <a href="{$t.url}"><img src="{dr_thumb($t.thumb, 150, 112)}" style="display: inline; width: 150px; height: 112px;"></a>
+                    </div>
+                    <a href="{$t.url}">{dr_strcut($t.title, 20)}</a>
+				</li>
+                {/list}{$error}
+			</ul>
+        </div>
+    </div>
+	{/list}
+	<div class="bk10"></div>
+</div>
+
+{template "footer.html","/"}

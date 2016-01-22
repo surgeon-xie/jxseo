@@ -1,0 +1,10 @@
+<ul class="info-item clear">
+    <li class="pic">
+        <div class="img-wrap">
+        <a href="{$t.url}"><img src="{dr_thumb($t.thumb, 110, 90)}" width="110" height="90" /></a></div>
+    </li>
+    <li class="info">
+        <h2><a href="{$t.url}">{dr_keyword_highlight($t.title, $keyword)}</a></h2>
+        <p style="line-height:20px">{$t.description}</p>
+    </li>
+</ul>

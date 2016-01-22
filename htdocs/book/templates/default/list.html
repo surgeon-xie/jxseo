@@ -1,0 +1,45 @@
+{template "header.html"}
+<link rel="stylesheet" type="text/css" href="{HOME_THEME_PATH}css/list.css" />
+<div class="Dg">您当前位置：<a href="{SITE_URL}">首页</a>  > <a href="{MODULE_URL}">{MODULE_NAME}</a>  > {dr_catpos($catid, ' > ')}</div>
+<div class="main clear">
+    <div class="col-left"> 
+    	<div class="category-main box generic info-content">
+        	<div class="title">
+                <strong>{$cat.name}</strong>
+            </div>
+            {list action=module catid=$catid order=updatetime page=1}
+			{template "list_data.html"}
+            {/list}{$error}
+			<div id="pages" class="text-c">{$pages}</div>
+		</div>
+    </div>
+    <div class="col-auto">
+    	<div class="box">
+            <h5 class="title-2">栏目分类</h5>
+            <ul class="content col3 h28">
+            	{list action=category pid=0}
+            	<li><a href="{$t.url}">{$t.name}</a></li>
+                {/list}
+            </ul>
+        </div>
+        <div class="bk10"></div>
+    	 <div class="box">
+            <h5 class="title-2">最新图书</h5>
+            <ul class="content digg">
+            	{list action=module catid=$catid field=title,url order=updatetime num=10}	
+				<li><a href="{$t.url}">{$t.title}</a></li>
+                {/list}
+           	</ul>
+        </div>
+        <div class="bk10"></div>
+        <div class="box">
+            <h5 class="title-2">热门图书</h5>
+            <ul class="content digg">
+            	{list action=module catid=$catid field=title,url order=hits num=10}	
+				<li><a href="{$t.url}">{$t.title}</a></li>
+                {/list}
+            </ul>
+        </div>
+    </div>
+</div>
+{template "footer.html","/"}

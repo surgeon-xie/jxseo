@@ -1,0 +1,68 @@
+{template "header.html"}
+<script language="javascript">
+    // 这是加入收藏夹的ajax请求，我就随意写了一下提示信息，至于美化啊什么交给你们了
+    function dr_favorite() {
+        $.get("{MODULE_URL}index.php?c=api&m=favorite&id={$id}&cid={$cid}", function(data){
+            if (data == 1) {
+                dr_tips("没有登录，不能收藏");
+            } else if (data == 2) {
+                dr_tips("文档不存在，无法收藏");
+            } else if (data == 3) {
+                dr_tips("更新收藏成功", 3, 1);
+            } else if (data == 4) {
+                dr_tips("收藏成功", 3, 1);
+            }
+        });
+    }
+</script>
+<div class="Dg">您当前位置：<a href="{SITE_URL}">首页</a>  > <a href="{MODULE_URL}">{MODULE_NAME}</a>  > {dr_catpos($catid, ' > ')} > <a href="{$curl}">{$title}</a> > {$name}</div>
+<div class="main">
+	<!--left_bar-->
+	<div class="col-left">
+    	<div class="box boxsbg">
+        	<div class="contents">
+                <h5 class="tit" style="margin-top:0">
+                    {$name}<span class="Article-Tool"><a href="javascript:;" onclick="dr_favorite();" class="t6">收藏</a></span>
+                </h5>
+                <div class="down_intro">
+                  {$body}
+                </div>
+                <h5 class="tit"></h5>
+              	<div class="down_intro">
+                	<strong>上一篇：</strong>{if $prev_page}<a href="{$prev_page.url}">{$prev_page.name}</a>{else}没有了{/if}<br>
+                    <strong>下一篇：</strong>{if $next_page}<a href="{$next_page.url}">{$next_page.name}</a>{else}没有了{/if}
+              	</div>
+	  		</div>
+      	</div>
+    </div>
+    <!--right_bar-->
+    <div class="col-auto">
+    	<div class="box">
+            <h5 class="title-2">栏目分类</h5>
+            <ul class="content col3 h28">
+            	{list action=category pid=0}
+            	<li><a href="{$t.url}">{$t.name}</a></li>
+                {/list}
+            </ul>
+        </div>
+        <div class="bk10"></div>
+    	 <div class="box">
+            <h5 class="title-2">最新图书</h5>
+            <ul class="content digg">
+            	{list action=module catid=$catid field=title,url order=updatetime num=10}	
+				<li><a href="{$t.url}">{$t.title}</a></li>
+                {/list}
+           	</ul>
+        </div>
+        <div class="bk10"></div>
+        <div class="box">
+            <h5 class="title-2">热门图书</h5>
+            <ul class="content digg">
+            	{list action=module catid=$catid field=title,url order=hits num=10}	
+				<li><a href="{$t.url}">{$t.title}</a></li>
+                {/list}
+            </ul>
+        </div>
+    </div>
+</div>
+{template "footer.html","/"}
